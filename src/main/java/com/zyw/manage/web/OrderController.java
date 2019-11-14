@@ -43,7 +43,7 @@ public class OrderController {
     public PageResp dailyOrder(@RequestBody OrderReq req) {
         String principal = (String) SecurityUtils.getSubject().getPrincipal();
         log.info("dailyOrder user:{},roles:{}", principal);
-        PageInfo pageInfo = orderService.dailyOrder(req);
+        PageInfo<OrderEntity> pageInfo = orderService.dailyOrder(req);
         PageResp resp = PageResp.success(pageInfo.getList());
         resp.setTotal(pageInfo.getTotal());
         resp.setPageSize(pageInfo.getPageSize());

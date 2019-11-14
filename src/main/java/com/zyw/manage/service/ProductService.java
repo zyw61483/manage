@@ -1,7 +1,9 @@
 package com.zyw.manage.service;
 
 import com.zyw.manage.domain.entity.PartnerEntity;
+import com.zyw.manage.domain.entity.ProductEntity;
 import com.zyw.manage.mapper.PartnerEntityMapper;
+import com.zyw.manage.mapper.ProductEntityMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,14 +16,14 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class PartnerService {
+public class ProductService {
     @Autowired
-    private PartnerEntityMapper partnerEntityMapper;
+    private ProductEntityMapper productEntityMapper;
 
-    public String getPartnerNameByid(long id){
-        PartnerEntity partnerEntity = partnerEntityMapper.selectByPrimaryKey(id);
-        if(null == partnerEntity)
+    public String getProductNameByid(long id){
+        ProductEntity productEntity = productEntityMapper.selectByPrimaryKey(id);
+        if(null == productEntity)
             return null;
-        return partnerEntity.getPartnerName();
+        return productEntity.getProductName();
     }
 }

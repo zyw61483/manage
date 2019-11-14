@@ -24,11 +24,15 @@ import java.util.Objects;
 @Service
 public class OrderService {
     @Autowired
+    private PartnerService    partnerService;
+    @Autowired
+    private ProductService    productService;
+    @Autowired
     private OrderEntityMapper orderEntityMapper;
 
     public void createOrder(OrderReq req) {
         ArrayList<OrderEntity> list = new ArrayList<>();
-        for(OrderEntity orderEntity:req.getOrders()){
+        for (OrderEntity orderEntity : req.getOrders()) {
             orderEntity.setModifier(Constants.SYSTEM);
             orderEntity.setGmtCreated(new Date());
             orderEntity.setGmtModified(new Date());
@@ -37,12 +41,17 @@ public class OrderService {
         orderEntityMapper.insertList(list);
     }
 
-    public PageInfo dailyOrder(OrderReq req) {
+    public PageInfo<OrderEntity> dailyOrder(OrderReq req) {
         OrderEntity orderEntity = new OrderEntity();
-        if(Objects.nonNull(req.getPartnerId()))
+        if (Objects.nonNull(req.getPartnerId()))
             orderEntity.setPartnerId(req.getPartnerId());
-        if(Objects.nonNull(req.getOrderTime()))
+        if (Objects.nonNull(req.getOrderTime()))
             orderEntity.setOrderTime(req.getOrderTime());
-        return PageHelper.startPage(req.getPageNo(), req.getPageSize()).doSelectPageInfo(() -> orderEntityMapper.select(orderEntity));
+        PageInfo<OrderEntity> pageInfo = PageHelper.startPage(req.getPageNo(), req.getPageSize()).doSelectPageInfo(() -> orderEntityMapper.select(orderEntity));
+        for (OrderEntity order : pageInfo.getList()) {
+            order.setPartnerName(partnerService.getPartnerNameByid(order.getPartnerId()));
+            order.setProductName(productService.getProductNameByid(order.getProductId()));
+        }
+        return pageInfo;
     }
 }
