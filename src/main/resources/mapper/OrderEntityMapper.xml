@@ -18,4 +18,18 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
   </resultMap>
+
+  <sql id="Base_Column_List">
+    id,partner_id,product_id,count,order_time,is_deleted,creator,gmt_created,modifier,gmt_modified
+  </sql>
+
+  <select id="selectOrderByPage" parameterType="com.zyw.manage.domain.entity.OrderEntity" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from manage_order
+    where is_deleted = 'N'
+    <if test="order.modifier != null">
+      and partner_id = #{order.partner_id,jdbcType=BIGINT}
+    </if>
+  </select>
 </mapper>

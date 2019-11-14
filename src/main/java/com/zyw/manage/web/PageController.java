@@ -1,17 +1,12 @@
 package com.zyw.manage.web;
 
-import com.zyw.manage.domain.dto.req.BaseResp;
-import com.zyw.manage.domain.dto.req.UserReq;
 import com.zyw.manage.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * UserController

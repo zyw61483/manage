@@ -1,6 +1,6 @@
 package com.zyw.manage.web;
 
-import com.zyw.manage.domain.dto.req.BaseResp;
+import com.zyw.manage.domain.dto.resp.BaseResp;
 import com.zyw.manage.domain.dto.req.UserReq;
 import com.zyw.manage.service.UserService;
 import lombok.extern.slf4j.Slf4j;
