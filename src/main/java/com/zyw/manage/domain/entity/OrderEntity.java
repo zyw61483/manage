@@ -1,5 +1,6 @@
 package com.zyw.manage.domain.entity;
 
+import com.zyw.manage.Utils.DateUtil;
 import lombok.Data;
 
 import java.util.Date;
@@ -28,7 +29,7 @@ public class OrderEntity {
 
     public void setOrderTime(Date orderTime){
         this.orderTime = orderTime;
-//        this.orderTimeStr =
+        this.orderTimeStr = DateUtil.toYMD(orderTime);
     }
 
     /**

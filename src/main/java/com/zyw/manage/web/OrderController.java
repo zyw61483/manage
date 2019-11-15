@@ -1,14 +1,17 @@
 package com.zyw.manage.web;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.zyw.manage.domain.dto.resp.BaseResp;
 import com.zyw.manage.domain.dto.req.OrderReq;
 import com.zyw.manage.domain.dto.resp.PageResp;
 import com.zyw.manage.domain.entity.OrderEntity;
+import com.zyw.manage.domain.entity.UserEntity;
 import com.zyw.manage.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresUser;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +37,11 @@ public class OrderController {
 
     @RequestMapping(value = "/order/createOrder", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public BaseResp createOrder(@RequestBody OrderReq req) {
+        UserEntity user = (UserEntity) SecurityUtils.getSubject().getPrincipal();
+        log.info("createOrder user:{}", user.getUsername());
+        req.setUserId(user.getId());
+        req.setPartnerId(user.getPartnerId());
+        req.setUsername(user.getUsername());
         orderService.createOrder(req);
         return BaseResp.success();
     }
@@ -41,13 +49,23 @@ public class OrderController {
     @RequiresUser
     @RequestMapping(value = "/order/dailyOrder", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public PageResp dailyOrder(@RequestBody OrderReq req) {
-        String principal = (String) SecurityUtils.getSubject().getPrincipal();
-        log.info("dailyOrder user:{},roles:{}", principal);
+        UserEntity user = (UserEntity) SecurityUtils.getSubject().getPrincipal();
+        log.info("dailyOrder user:{},roles:{}", user.getUsername(),user.getRoles());
         PageInfo<OrderEntity> pageInfo = orderService.dailyOrder(req);
         PageResp resp = PageResp.success(pageInfo.getList());
         resp.setTotal(pageInfo.getTotal());
         resp.setPageSize(pageInfo.getPageSize());
         return resp;
+    }
+
+    @RequiresUser
+    @RequestMapping(value = "/order/delOrder", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public BaseResp delOrder(@RequestBody OrderReq req) {
+        UserEntity user = (UserEntity) SecurityUtils.getSubject().getPrincipal();
+        log.info("delOrder user:{},roles:{}", user.getUsername(),user.getRoles());
+        req.setUsername(user.getUsername());
+        orderService.delOrder(req);
+        return BaseResp.success();
     }
 
 }

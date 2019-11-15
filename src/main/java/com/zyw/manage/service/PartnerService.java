@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * PartnerService
  *
@@ -23,5 +25,9 @@ public class PartnerService {
         if(null == partnerEntity)
             return null;
         return partnerEntity.getPartnerName();
+    }
+
+    public List<PartnerEntity> getAllPartner() {
+        return partnerEntityMapper.selectAll();
     }
 }

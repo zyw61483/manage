@@ -15,6 +15,7 @@ import java.util.List;
 @Data
 public class OrderReq extends PageReq {
     private Long              userId;
+    private String              username;
     private Long              partnerId;
     private Date              orderTime;
     private List<OrderEntity> orders;

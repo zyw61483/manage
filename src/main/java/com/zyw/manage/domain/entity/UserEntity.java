@@ -3,6 +3,7 @@ package com.zyw.manage.domain.entity;
 import com.zyw.manage.enums.Permission;
 import com.zyw.manage.enums.Role;
 import lombok.Data;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,12 +39,14 @@ public class UserEntity {
     private List<String> roles = new ArrayList<>();
 
     public List<String> getRoles() {
-        if (Objects.equals(Role.ADMIN.getCode(), role)) {
-            this.roles.add(Role.ADMIN.name());
-            this.roles.add(Role.USER.name());
-        }
-        if (Objects.equals(Role.USER.getCode(), role)) {
-            this.roles.add(Role.USER.name());
+        if (CollectionUtils.isEmpty(roles)) {
+            if (Objects.equals(Role.ADMIN.getCode(), role)) {
+                this.roles.add(Role.ADMIN.name());
+                this.roles.add(Role.USER.name());
+            }
+            if (Objects.equals(Role.USER.getCode(), role)) {
+                this.roles.add(Role.USER.name());
+            }
         }
         return roles;
     }
