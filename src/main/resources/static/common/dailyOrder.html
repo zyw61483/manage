@@ -1,3 +1,19 @@
+<style>
+        @media (min-width: 768px) {
+            .example1 {
+                font-size:5px;
+            }
+        ｝
+        @media (min-width: 992px) {
+            .example1 {
+                font-size:5px;
+            }
+        ｝
+
+
+
+</style>
+
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -15,35 +31,85 @@
             <div class="card-header d-flex p-0">
                 <ul class="nav nav-pills ml-auto p-2">
                     <li class="nav nav-item p-1">
-                        <button type="button" class="btn btn-primary btn-block btn-sm">新增</button>
+                        <button id="orderAdd" type="button" class="btn btn-primary btn-block " data-toggle="modal"
+                                data-target="#modal-default">新增
+                        </button>
                     </li>
                     <li class="nav nav-item p-1">
-                        <button type="button" class="btn btn-danger btn-block btn-sm">删除</button>
+                        <button id="dailyDel" type="button" class="btn btn-danger btn-block ">删除</button>
                     </li>
                 </ul>
             </div>
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-hover" width="100%">
+                <table id="example1" class="table table-bordered " width="100%">
                     <thead>
                     <tr>
+                        <th>id</th>
                         <th>订单时间</th>
                         <th>店铺名称</th>
                         <th>商品名称</th>
                         <th>数量</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>Trident</td>
-                        <td>Internet
-                            Explorer 4.0
-                        </td>
-                        <td>Win 95+</td>
-                        <td> 4</td>
-                    </tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
+
+            <div class="modal fade" id="modal-default">
+                <div class="modal-dialog ">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">新增订单</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-5 mb-3">
+                                        <select id="addSelect" class="custom-select"></select>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="input-group mb-3">
+                                            <input id="addCount" type="text" class="form-control">
+                                            <div class="input-group-append">
+                                                <span id="addCountUnit" class="input-group-text"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 mb-3">
+                                        <button id="addBtn" type="button" class="btn btn-block btn-primary">添加</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table id="addTable" class="table table-bordered " width="100%">
+                                            <thead>
+                                            <tr>
+                                                <th>商品名称</th>
+                                                <th>数量</th>
+                                                <th>移除</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="addTbody">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button id="addCommit" type="button" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
         </div>
     </div><!-- /.container-fluid -->
 </div>
+

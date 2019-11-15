@@ -14,7 +14,13 @@ var zyw = {
                dataType: 'json',
                contentType: 'application/json',
              data:JSON.stringify(json),
-             success:func
+             success:function(resp){
+                    if(resp.code =="0000"){
+                        func(resp.data)
+                    }else{
+                        alert(resp.msg)
+                    }
+                }
              });
          }
 };

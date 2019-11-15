@@ -17,10 +17,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="/dist/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
     <style>
         .selected {
             background-color: #007bff;
         }
+
     </style>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -113,7 +115,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="dropdown-divider"></div>
                     <a href="#" class="dropdown-item">
                         <i class="fas fa-envelope mr-2"></i>
-                        <span class="text-sm"> 密码修改</span>
+                        <span class="text-sm">密码修改</span>
                     </a>
                     <div class="dropdown-divider"></div>
                     <a id="logout" href="/user/logout" class="dropdown-item">
@@ -155,7 +157,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             <!-- Sidebar Menu -->
             <nav class="mt-2">
-                <ul id="menu" class="nav nav-pills nav-sidebar flex-column text-sm" data-widget="treeview" role="menu"
+                <ul id="menu" class="nav nav-pills nav-sidebar flex-column " data-widget="treeview" role="menu"
                     data-accordion="false">
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
@@ -210,13 +212,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <footer class="main-footer">
         <!-- To the right -->
         <div class="float-right d-none d-sm-inline">
-            Anything you want
+            欢迎使用
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">zyw</a>.</strong> All rights reserved.
     </footer>
 </div>
 <!-- ./wrapper -->
+
 
 <!-- REQUIRED SCRIPTS -->
 
@@ -229,12 +232,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="/plugins/datatables/jquery.dataTables.js"></script>
 <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
 <script src="/common/common.js"></script>
+<script src="/plugins/toastr/toastr.min.js"></script>
+<div id="toastsContainerTopRight" class="toasts-top-right fixed"></div>
+<div class="modal fade" id="modal-sm">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">提示</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMsg"></p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 </body>
 <script>
-
+var trCount = 1
+function delTr(trCount){
+    var trId="#addTrId"+trCount;
+    $(trId).remove();
+}
 $("#dailyOrder").click(function(){
     $(".content-wrapper").load("/common/dailyOrder.html",function(){
-        $("#example1").DataTable({
+        var dailyTable = $("#example1").DataTable({
           "paging": true,
           "lengthChange": false,
           "searching": false,
@@ -251,7 +281,6 @@ $("#dailyOrder").click(function(){
                 "url": "/order/dailyOrder",
                 "dataType": "json",
                 "data":function(d){
-                    //alert( JSON.stringify(d))
                     var pageNo = d.start/d.length+1;
                     return JSON.stringify({
                         "pageNo":pageNo,
@@ -286,20 +315,27 @@ $("#dailyOrder").click(function(){
             });  
 
           },
-          "initComplete": function () {
-            $(".paginate_button").addClass("text-sm");
-            $("#example1 tbody tr").click(function() {
-                $(this).toggleClass("selected");
-                $(this).removeClass("table-hover");
-                //alert($(this).html())
-            });
-          },
+          //"initComplete": function () {
+          //  $(".paginate_button").addClass("text-sm");
+          //  $("#example1 tbody tr").click(function() {
+          //      $(this).toggleClass("selected");
+          //      $(this).removeClass("table-hover");
+          //      //alert($(this).html())
+          //  });
+          //},
            "columns": [
-                {"data": "orderTime"},
+                {"data": "id","visible":false},
+                {"data": "orderTimeStr"},
                 {"data": "partnerName"},
                 {"data": "productName"},
                 {"data": "count"}
             ],
+            //"aoColumns": [
+            //  {
+            //    "sTitle": "id",
+            //    "bVisible": false
+            //  }
+            //],
           "language": {
                     "processing": "玩命加载中...",
                     "lengthMenu": "显示 _MENU_ 项结果",
@@ -319,7 +355,76 @@ $("#dailyOrder").click(function(){
                 },
         });
 
+        zyw.post("/product/getAllProduct",null,function(list){
+            var opt =''
+            for(var i=0;i<list.length;i++){
+                opt += '<option value="'+list[i].id+'">'+list[i].productName+'</option>'
+            }
+            $("#addSelect").append(opt);
+        })
+
+        $("#dailyDel").click(function(){
+            //console.log(dailyTable.rows('.selected').data().length)
+            var selectedList = dailyTable.rows('.selected').data();
+            var req = {
+                "orders":[]
+            }
+            for(var i=0;i<dailyTable.rows('.selected').data().length;i++){
+                req.orders.push(dailyTable.rows('.selected').data()[i])
+            }
+            console.log(req)
+            zyw.post("/order/delOrder",req,function(){
+                $("#modalMsg").text("删除成功");
+                $("#modal-sm").modal("show");
+            })
+        })
+
+        $("#addCount").focus(function(){
+            $("#addCount").removeClass("is-invalid")
+        })
+
+        $("#addBtn").click(function(){
+            trCount = trCount+1;
+            var count = $("#addCount").val();
+            if(zyw.checkInput($("#addCount").val(),'数量不能为空')){
+                $("#addCount").addClass("is-invalid")
+                return;
+            }
+            var productName = $("#addSelect").find("option:selected").text();
+            var productId = $("#addSelect").val();
+            var th = '<tr id="addTrId'+trCount+'"><td style="display:none"><input id="addTrIdHidden'+trCount+'" value="'+productId+'" type="hidden"></input><input id="addTrCountHidden'+trCount+'" type="hidden" value="'+count+'"></input></td><td>'+productName+'</td><td>'+count+'</td><td><button onclick="delTr('+trCount+')" type="button" class="btn btn-danger btn-block btn-sm">移除</button></td></tr>'
+            $("#addTbody").append(th);
+        });
+
+        $("#addCommit").click(function(){
+            var req={orders:[]}
+            $("#addTbody tr").each(function(i){
+                var trId = $(this).attr("id");
+                var count = trId.substr(7);
+                var productId = $("#addTrIdHidden"+count).val();
+                var productCount = $("#addTrCountHidden"+count).val();
+                req.orders.push({"productId":productId,"count":productCount});
+            });
+
+            zyw.post('/order/createOrder',req,function(data){
+                $("#modal-default").modal("hide");
+                $("#modalMsg").text("提交成功");
+                $("#modal-sm").modal("show");
+            })
+        })
+
+        $('#modal-sm').on('hide.bs.modal', function () {
+            $('.modal-backdrop').remove();
+            $("#dailyOrder").click();
+        })
+
+        $('#example1 tbody').on('click', 'tr', function () {
+            $(this).toggleClass('selected');
+        });
     });
+
+
+
 })
 
 </script>
