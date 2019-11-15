@@ -28,7 +28,8 @@ public class CustomRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        UserEntity user = userService.getUserByUsername((String) principalCollection.getPrimaryPrincipal());
+        UserEntity user = (UserEntity) principalCollection.getPrimaryPrincipal();
+        user = userService.getUserByUsername(user.getUsername());
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         simpleAuthorizationInfo.addRoles(user.getRoles());
         simpleAuthorizationInfo.addStringPermissions(user.getRermissions());
@@ -48,7 +49,7 @@ public class CustomRealm extends AuthorizingRealm {
             return null;
         } else {
             //这里验证authenticationToken和simpleAuthenticationInfo的信息
-            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(name, user.getPassword().toString(), getName());
+            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword().toString(), getName());
             return simpleAuthenticationInfo;
         }
     }
