@@ -34,6 +34,7 @@ public class PageController {
         UserEntity user = (UserEntity) subject.getPrincipal();
         Session session = subject.getSession();
         session.setAttribute("username",user.getUsername());
+        session.setAttribute("role",user.getRole());
         session.setAttribute("partnerName",partnerService.getPartnerNameByid(user.getPartnerId()));
         return "starter";
     }
@@ -51,6 +52,11 @@ public class PageController {
     @RequestMapping(value = "/page/login", method = RequestMethod.GET)
     public String login() {
         return "login";
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String index() {
+        return "starter";
     }
 
 }
