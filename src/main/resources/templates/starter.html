@@ -255,6 +255,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+<div class="modal fade" id="modal-sm-confirm">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">提示</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMsgConfirm"></p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="modalConfirmOk" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 </body>
 <script>
 var trCount = 1
@@ -363,20 +385,27 @@ $("#dailyOrder").click(function(){
             $("#addSelect").append(opt);
         })
 
-        $("#dailyDel").click(function(){
-            //console.log(dailyTable.rows('.selected').data().length)
-            var selectedList = dailyTable.rows('.selected').data();
+        $("#modalConfirmOk").click(function(){
+           var selectedList = dailyTable.rows('.selected').data();
             var req = {
                 "orders":[]
             }
             for(var i=0;i<dailyTable.rows('.selected').data().length;i++){
                 req.orders.push(dailyTable.rows('.selected').data()[i])
             }
-            console.log(req)
             zyw.post("/order/delOrder",req,function(){
                 $("#modalMsg").text("删除成功");
                 $("#modal-sm").modal("show");
             })
+        })
+
+        $("#dailyDel").click(function(){
+            if(zyw.checkInput(dailyTable.rows('.selected').data().length,'请先选择要删除的订单')){
+                $("#addCount").addClass("is-invalid")
+                return;
+            }
+            $("#modalMsgConfirm").text("您确认要删除选择的订单吗？")
+            $("#modal-sm-confirm").modal("show");
         })
 
         $("#addCount").focus(function(){
