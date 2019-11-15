@@ -1,5 +1,6 @@
 package com.zyw.manage.domain.entity;
 
+import com.zyw.manage.common.Constants;
 import com.zyw.manage.enums.Permission;
 import com.zyw.manage.enums.Role;
 import lombok.Data;
@@ -25,7 +26,7 @@ public class UserEntity {
 
     private Long partnerId;
 
-    private String isDeleted;
+    private String isDeleted= Constants.N;
 
     private String creator;
 

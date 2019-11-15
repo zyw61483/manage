@@ -3,13 +3,13 @@
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>AdminLTE 3 | Starter</title>
+    <title>Neptune</title>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
@@ -18,6 +18,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
+    <link rel="stylesheet" href="/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <style>
         .selected {
             background-color: #007bff;
@@ -61,7 +63,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     Brad Diesel
                                     <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
                                 </h3>
-                                <p class="text-sm">Call me whenever you can...</p>
+                                <p class="text-sm">欢迎使用X系统</p>
                                 <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
                             </div>
                         </div>
@@ -78,7 +80,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     John Pierce
                                     <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
                                 </h3>
-                                <p class="text-sm">I got your message bro</p>
+                                <p class="text-sm">目前还有些功能正在开发中。。。</p>
                                 <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
                             </div>
                         </div>
@@ -95,7 +97,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     Nora Silvester
                                     <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
                                 </h3>
-                                <p class="text-sm">The subject goes here</p>
+                                <p class="text-sm">相信很快就能使用了！</p>
                                 <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
                             </div>
                         </div>
@@ -113,7 +115,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <span class="dropdown-header">用户菜单</span>
                     <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
+                    <a href="#" class="dropdown-item doing">
                         <i class="fas fa-envelope mr-2"></i>
                         <span class="text-sm">密码修改</span>
                     </a>
@@ -140,7 +142,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <a href="/page/index" class="brand-link">
             <img src="/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                  style="opacity: .8">
-            <span class="brand-text font-weight-light">AdminLTE 3</span>
+            <span class="brand-text font-weight-light">Neptune</span>
         </a>
 
         <!-- Sidebar -->
@@ -148,10 +150,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                    <img src="/dist/img/user2-160x160.jpg" class="img-circle elevation-2 mt-3" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">username</a>
+                    <div class="row">
+                        <div class="col-6">
+                            <a id="userText" class="d-block"></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <a id="partnerNameText" class="d-block"></a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -170,8 +181,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link ">
+                            <li class="nav-item" >
+                                <a href="#" class="nav-link doing" >
                                     <i class="far nav-icon"></i>
                                     <p>新增用户</p>
                                 </a>
@@ -188,9 +199,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a id="dailyOrder" class="nav-link ">
+                                <a id="dailyOrder" href="#" class="nav-link ">
                                     <i class="far nav-icon"></i>
                                     <p>每日订单</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link doing" >
+                                    <i class="far nav-icon"></i>
+                                    <p>每月订单</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link doing" >
+                                    <i class="far nav-icon"></i>
+                                    <p>单品统计</p>
                                 </a>
                             </li>
                         </ul>
@@ -212,7 +235,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <footer class="main-footer">
         <!-- To the right -->
         <div class="float-right d-none d-sm-inline">
-            欢迎使用
+            Welcome!
         </div>
         <!-- Default to the left -->
         <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">zyw</a>.</strong> All rights reserved.
@@ -231,6 +254,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="/dist/js/adminlte.min.js"></script>
 <script src="/plugins/datatables/jquery.dataTables.js"></script>
 <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<script src="/plugins/sweetalert2/sweetalert2.min.js"></script>
 <script src="/common/common.js"></script>
 <script src="/plugins/toastr/toastr.min.js"></script>
 <div id="toastsContainerTopRight" class="toasts-top-right fixed"></div>
@@ -277,8 +301,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+<input id="username" type="hidden" th:value="${session.username}">
+<input id="partnerName" type="hidden" th:value="${session.partnerName}">
+<div id="hidVal" style="display:none">
+
+
+</div>
 </body>
+</html>
 <script>
+
+$("#userText").text(($("#username").val()))
+$("#partnerNameText").text(($("#partnerName").val()))
+$(".doing").click(function(){
+    zyw.doing()
+})
 var trCount = 1
 function delTr(trCount){
     var trId="#addTrId"+trCount;
@@ -337,14 +374,6 @@ $("#dailyOrder").click(function(){
             });  
 
           },
-          //"initComplete": function () {
-          //  $(".paginate_button").addClass("text-sm");
-          //  $("#example1 tbody tr").click(function() {
-          //      $(this).toggleClass("selected");
-          //      $(this).removeClass("table-hover");
-          //      //alert($(this).html())
-          //  });
-          //},
            "columns": [
                 {"data": "id","visible":false},
                 {"data": "orderTimeStr"},
@@ -352,12 +381,6 @@ $("#dailyOrder").click(function(){
                 {"data": "productName"},
                 {"data": "count"}
             ],
-            //"aoColumns": [
-            //  {
-            //    "sTitle": "id",
-            //    "bVisible": false
-            //  }
-            //],
           "language": {
                     "processing": "玩命加载中...",
                     "lengthMenu": "显示 _MENU_ 项结果",
@@ -379,10 +402,18 @@ $("#dailyOrder").click(function(){
 
         zyw.post("/product/getAllProduct",null,function(list){
             var opt =''
+            var input =''
             for(var i=0;i<list.length;i++){
                 opt += '<option value="'+list[i].id+'">'+list[i].productName+'</option>'
+                input +='<input id="hidProduct'+list[i].id+'" type="hidden" value="'+list[i].unit+'">'
             }
             $("#addSelect").append(opt);
+            $("#hidVal").append(input);
+            $("#addCountUnit").text($("#hidProduct"+$("#addSelect").val()).val());
+        })
+
+        $("#addSelect").on("change",function(){
+            $("#addCountUnit").text($("#hidProduct"+$("#addSelect").val()).val());
         })
 
         $("#modalConfirmOk").click(function(){
@@ -404,6 +435,17 @@ $("#dailyOrder").click(function(){
                 $("#addCount").addClass("is-invalid")
                 return;
             }
+            for(var i=0;i<dailyTable.rows('.selected').data().length;i++){
+                var data = dailyTable.rows('.selected').data()[i];
+                var orderTime = data.orderTime.substr(0,10);
+                var d1 = zyw.dateFormat("YYYY-mm-dd",new Date(orderTime.replace(/\-/g, "\/")));
+                var d2 = zyw.dateFormat("YYYY-mm-dd",new Date());
+                if(d1<d2){
+                    zyw.errorMsg("不能删除历史订单");
+                    return;
+                }
+            }
+
             $("#modalMsgConfirm").text("您确认要删除选择的订单吗？")
             $("#modal-sm-confirm").modal("show");
         })
@@ -457,4 +499,3 @@ $("#dailyOrder").click(function(){
 })
 
 </script>
-</html>

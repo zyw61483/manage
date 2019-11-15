@@ -48,7 +48,7 @@ public class OrderEntity {
      *
      * @mbg.generated Sun Nov 10 20:58:01 CST 2019
      */
-    private String creator = "SYSTEM";
+    private String creator;
 
     /**
      *

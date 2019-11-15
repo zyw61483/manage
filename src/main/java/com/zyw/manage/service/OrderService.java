@@ -38,7 +38,8 @@ public class OrderService {
         for (OrderEntity orderEntity : req.getOrders()) {
             orderEntity.setOrderTime(new Date());
             orderEntity.setPartnerId(req.getPartnerId());
-            orderEntity.setModifier(Constants.SYSTEM);
+            orderEntity.setModifier(req.getUsername());
+            orderEntity.setCreator(req.getUsername());
             orderEntity.setGmtCreated(new Date());
             orderEntity.setGmtModified(new Date());
             orderEntity.setModifier(req.getUsername());
@@ -66,7 +67,7 @@ public class OrderService {
             orderEntity.setPartnerId(req.getPartnerId());
         if (Objects.nonNull(req.getOrderTime()))
             orderEntity.setOrderTime(req.getOrderTime());
-        PageInfo<OrderEntity> pageInfo = PageHelper.startPage(req.getPageNo(), req.getPageSize()).doSelectPageInfo(() -> orderEntityMapper.select(orderEntity));
+        PageInfo<OrderEntity> pageInfo = PageHelper.startPage(req.getPageNo(), req.getPageSize()).setOrderBy("order_time desc").doSelectPageInfo(() -> orderEntityMapper.select(orderEntity));
         for (OrderEntity order : pageInfo.getList()) {
             order.setPartnerName(partnerService.getPartnerNameByid(order.getPartnerId()));
             order.setProductName(productService.getProductNameByid(order.getProductId()));

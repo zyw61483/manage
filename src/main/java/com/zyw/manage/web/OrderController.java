@@ -7,6 +7,7 @@ import com.zyw.manage.domain.dto.req.OrderReq;
 import com.zyw.manage.domain.dto.resp.PageResp;
 import com.zyw.manage.domain.entity.OrderEntity;
 import com.zyw.manage.domain.entity.UserEntity;
+import com.zyw.manage.enums.Role;
 import com.zyw.manage.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * UserController
@@ -51,6 +53,8 @@ public class OrderController {
     public PageResp dailyOrder(@RequestBody OrderReq req) {
         UserEntity user = (UserEntity) SecurityUtils.getSubject().getPrincipal();
         log.info("dailyOrder user:{},roles:{}", user.getUsername(),user.getRoles());
+        if(!Objects.equals(Role.ADMIN.getCode(),user.getRole()))
+            req.setPartnerId(user.getPartnerId());
         PageInfo<OrderEntity> pageInfo = orderService.dailyOrder(req);
         PageResp resp = PageResp.success(pageInfo.getList());
         resp.setTotal(pageInfo.getTotal());
